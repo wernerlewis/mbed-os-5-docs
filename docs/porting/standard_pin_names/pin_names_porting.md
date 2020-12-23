@@ -1,8 +1,8 @@
 # Standard Pin Names Porting Guide
 
-This guide aims to help vendors update the PinNames.h files for their targets to comply with the new pin naming guidelines.
+This guide aims to help vendors to comply with the new pin naming guidelines.
 
-There is a set of generic guidelines that apply to all Mbed-enabled boards and another set of guidelines that additionally applies to Mbed-enabled boards which have an Arduino Uno compatible connector. The guideline documents can be found here:
+There is a set of generic guidelines that apply to all boards, and further sets of guidelines that additionally apply to boards that have certain compatible connectors. The current guideline documents can be found here:
 * [General Pin Names Design Document](https://github.com/ARMmbed/mbed-os/blob/feature-std-pin-name/docs/design-documents/hal/0004-pin-names-general-guidelines.md)
 * [Arduino Uno Pin Names Design Document](https://github.com/ARMmbed/mbed-os/blob/feature-std-pin-name/docs/design-documents/hal/0005-pin-names-Arduino-Uno-standard.md)
 
@@ -11,7 +11,7 @@ There is a set of generic guidelines that apply to all Mbed-enabled boards and a
 The generic guidelines currently define rules for the naming of LED pins, button pins and UART pins. In summary, the rules are:
 * LED pins are defined as `LEDx` (e.g. `LED0`, `LED1`)
 * Button pins are defined as `BUTTONx` (e.g. `BUTTON0`, `BUTTON1`)
-* UART pins are defined as `USBTX` and `USBRX`
+* UART pins for communication with host are defined as `USBTX` and `USBRX`
 * Pin aliases are allowed (e.g. `#define RED_LED LED1`)
 * Pin definitions must be a `#define`, not an `enum`
 * A physical MCU pin can be assigned to no more than one LED, button or UART pin definition
@@ -21,19 +21,21 @@ The generic guidelines currently define rules for the naming of LED pins, button
 Please refer to the design document for the full specification.
 
 ## Arduino Pin Names
-
 The Arduino guidelines currently define rules for the naming of the Arduino Uno connector pins, the functionality that each pin must support and the definition of Arduino Uno pin aliases. In summary, rules that apply to all Arduino pins are:
+* All ARDUINO_UNO_XXX pins are defined
 * A pin cannot be assigned to itself
 * A pin cannot be defined as `NC` (not connected)
+
+Also, every board that has the Arduino Uno connector must include `ARDUINO_UNO` in `targets.json` in the `supported_form_factors` list.
 
 There are additional rules for different types of pins. Below is a summary of those rules.
 
 ### Digital and Analog pins
 * Pins must be defined in a `PinName` enum
-* Digital pins D0-D15 must be defined as `ARDUINO_UNO_Dxx`
-* Analog pins A0-A5 must be defined as `ARDUINO_UNO_Ax`
+* Digital pins must be defined as `ARDUINO_UNO_Dxx`
+* Analog pins must be defined as `ARDUINO_UNO_Ax`
 * Analog pins must provide ADC functionality
-* A physical MCU pin can be assigned to no more than one Dxx or Ax Arduino pin
+* A physical MCU pin can be assigned to no more than one Arduino Uno pin
 
 ### I2C, SPI and UART pins
 * Pins D14, D15 must provide I2C functionality (SDA, SCL)
@@ -50,8 +52,10 @@ Please refer to the design document for the full specification.
 ## Compliance Testing
 
 After you have updated the `PinNames.h` files of your targets according to the above guidelines, you can check the files for compliance using two different methods.
+* Python script: performs syntax checks on pin definitions according pre-defined coding style rules
+* Greentea: performs build and run time checks on Mbed boards to make sure pins names and integration with Drivers work as expected
 
-### Using pinvalidate<span>.py</span>
+### Using pinvalidate<span>.py</span> Python script
 This is a Python script which you can use to quickly check the compliance of `PinNames.h` files with the above rules.
 
 The script can be found in `mbed-os/hal/tests/TESTS/pin_names`.
@@ -101,7 +105,7 @@ JSON and HTML output always include the highest level of detail.
 
 ### Using Greentea
 
-There is also a Greentea test to facilitate compliace testing on the target itself.
+There is also a Greentea test to facilitate compliance testing on the target itself.
 
 After setting up your environment to be able to run Greentea tests, you can run the compliance test:
 `mbed test -t GCC_ARM -m B_L4S5I_IOT01A -n *pin_names* --run -v`
