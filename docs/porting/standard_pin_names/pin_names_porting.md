@@ -105,7 +105,115 @@ JSON and HTML output always include the highest level of detail.
 
 ### Using Greentea
 
-There is also a Greentea test to facilitate compliance testing on the target itself.
+There is also a Greentea test to facilitate runtime compliance testing on actual hardware. This test will typically be run in the final stages of the migration, after the `PinNames.h` file is already passing the `pinvalidate.py` test. The Greentea test checks that every required pin is defined and then checks that the pins support the features specified in the Arduino standard by making some basic API calls. For example, for pins that are supposed to provide PWM functionality, the test case will configure them as such and then do some basic calls to generate a waveform on those pins.
 
-After setting up your environment to be able to run Greentea tests, you can run the compliance test:
-`mbed test -t GCC_ARM -m B_L4S5I_IOT01A -n *pin_names* --run -v`
+After setting up your environment to be able to run Greentea tests, you can compile run the standard pin names compliance test suites:
+`mbed test -t GCC_ARM -m DISCO_L475VG_IOT01A -n "*pin_names*" --compile`
+`mbed test -t GCC_ARM -m DISCO_L475VG_IOT01A -n *pin_names* --run`
+
+You can expect the following output:
+
+```(p3venv) geopsi01@C02WX27NHV2R mbed-os % mbed test -t GCC_ARM -m DISCO_L475VG_IOT01A -n "*pin_names*" --run
+[mbed] Working path "/Users/geopsi01/Development/mbed-os" (program)
+mbedgt: greentea test automation tool ver. 1.8.1
+mbedgt: test specification file './BUILD/tests/DISCO_L475VG_IOT01A/GCC_ARM/test_spec.json' (specified with --test-spec option)
+mbedgt: using './BUILD/tests/DISCO_L475VG_IOT01A/GCC_ARM/test_spec.json' from current directory!
+mbedgt: detecting connected mbed-enabled devices...
+mbedgt: detected 1 device
+mbedgt: processing target 'DISCO_L475VG_IOT01A' toolchain 'GCC_ARM' compatible platforms... (note: switch set to --parallel 1)
+mbedgt: test case filter (specified with -n option)
+	*pin_names*
+	test filtered in 'hal-tests-tests-pin_names-arduino_uno'
+mbedgt: running 1 test for platform 'DISCO_L475VG_IOT01A' and toolchain 'GCC_ARM'
+mbedgt: mbed-host-test-runner: started
+;mbedgt: checking for GCOV data...
+mbedgt: test on hardware with target id: 07640221706D696D4F29FF34
+mbedgt: test suite 'hal-tests-tests-pin_names-arduino_uno' ........................................... OK in 32.23 sec
+	test case: 'ADC A0' .......................................................................... OK in 0.05 sec
+	test case: 'ADC A1' .......................................................................... OK in 0.05 sec
+	test case: 'ADC A2' .......................................................................... OK in 0.05 sec
+	test case: 'ADC A3' .......................................................................... OK in 0.05 sec
+	test case: 'ADC A4' .......................................................................... OK in 0.04 sec
+	test case: 'ADC A5' .......................................................................... OK in 0.05 sec
+	test case: 'GPIO A0' ......................................................................... OK in 0.06 sec
+	test case: 'GPIO A1' ......................................................................... OK in 0.06 sec
+	test case: 'GPIO A2' ......................................................................... OK in 0.05 sec
+	test case: 'GPIO A3' ......................................................................... OK in 0.05 sec
+	test case: 'GPIO A4' ......................................................................... OK in 0.05 sec
+	test case: 'GPIO A5' ......................................................................... OK in 0.04 sec
+	test case: 'GPIO D0' ......................................................................... OK in 0.05 sec
+	test case: 'GPIO D1' ......................................................................... OK in 0.05 sec
+	test case: 'GPIO D10' ........................................................................ OK in 0.05 sec
+	test case: 'GPIO D11' ........................................................................ OK in 0.04 sec
+	test case: 'GPIO D12' ........................................................................ OK in 0.05 sec
+	test case: 'GPIO D13' ........................................................................ OK in 0.05 sec
+	test case: 'GPIO D14' ........................................................................ OK in 0.05 sec
+	test case: 'GPIO D15' ........................................................................ OK in 0.05 sec
+	test case: 'GPIO D2' ......................................................................... OK in 0.05 sec
+	test case: 'GPIO D3' ......................................................................... OK in 0.06 sec
+	test case: 'GPIO D4' ......................................................................... OK in 0.04 sec
+	test case: 'GPIO D5' ......................................................................... OK in 0.05 sec
+	test case: 'GPIO D6' ......................................................................... OK in 0.05 sec
+	test case: 'GPIO D7' ......................................................................... OK in 0.06 sec
+	test case: 'GPIO D8' ......................................................................... OK in 0.04 sec
+	test case: 'GPIO D9' ......................................................................... OK in 0.04 sec
+	test case: 'I2C' ............................................................................. OK in 0.07 sec
+	test case: 'PWM D10' ......................................................................... OK in 0.05 sec
+	test case: 'PWM D11' ......................................................................... OK in 0.04 sec
+	test case: 'PWM D3' .......................................................................... OK in 0.05 sec
+	test case: 'PWM D5' .......................................................................... OK in 0.05 sec
+	test case: 'PWM D6' .......................................................................... OK in 0.05 sec
+	test case: 'PWM D9' .......................................................................... OK in 0.04 sec
+	test case: 'SPI' ............................................................................. OK in 0.09 sec
+	test case: 'UART' ............................................................................ OK in 0.07 sec
+mbedgt: test case summary: 37 passes, 0 failures
+mbedgt: all tests finished!
+mbedgt: shuffle seed: 0.8352342017
+mbedgt: test suite report:
+| target                      | platform_name       | test suite                            | result | elapsed_time (sec) | copy_method |
+|-----------------------------|---------------------|---------------------------------------|--------|--------------------|-------------|
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | OK     | 32.23              | default     |
+mbedgt: test suite results: 1 OK
+mbedgt: test case report:
+| target                      | platform_name       | test suite                            | test case | passed | failed | result | elapsed_time (sec) |
+|-----------------------------|---------------------|---------------------------------------|-----------|--------|--------|--------|--------------------|
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | ADC A0    | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | ADC A1    | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | ADC A2    | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | ADC A3    | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | ADC A4    | 1      | 0      | OK     | 0.04               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | ADC A5    | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO A0   | 1      | 0      | OK     | 0.06               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO A1   | 1      | 0      | OK     | 0.06               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO A2   | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO A3   | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO A4   | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO A5   | 1      | 0      | OK     | 0.04               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D0   | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D1   | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D10  | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D11  | 1      | 0      | OK     | 0.04               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D12  | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D13  | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D14  | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D15  | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D2   | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D3   | 1      | 0      | OK     | 0.06               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D4   | 1      | 0      | OK     | 0.04               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D5   | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D6   | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D7   | 1      | 0      | OK     | 0.06               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D8   | 1      | 0      | OK     | 0.04               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | GPIO D9   | 1      | 0      | OK     | 0.04               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | I2C       | 1      | 0      | OK     | 0.07               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | PWM D10   | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | PWM D11   | 1      | 0      | OK     | 0.04               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | PWM D3    | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | PWM D5    | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | PWM D6    | 1      | 0      | OK     | 0.05               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | PWM D9    | 1      | 0      | OK     | 0.04               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | SPI       | 1      | 0      | OK     | 0.09               |
+| DISCO_L475VG_IOT01A-GCC_ARM | DISCO_L475VG_IOT01A | hal-tests-tests-pin_names-arduino_uno | UART      | 1      | 0      | OK     | 0.07               |
+mbedgt: test case results: 37 OK
+mbedgt: completed in 34.33 sec
+```
