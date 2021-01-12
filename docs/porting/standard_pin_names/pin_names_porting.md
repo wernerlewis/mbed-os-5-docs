@@ -108,7 +108,9 @@ JSON and HTML output always include the highest level of detail.
 There is also a Greentea test to facilitate runtime compliance testing on actual hardware. This test will typically be run in the final stages of the migration, after the `PinNames.h` file is already passing the `pinvalidate.py` test. The Greentea test checks that every required pin is defined and then checks that the pins support the features specified in the Arduino standard by making some basic API calls. For example, for pins that are supposed to provide PWM functionality, the test case will configure them as such and then do some basic calls to generate a waveform on those pins.
 
 After setting up your environment to be able to run Greentea tests, you can compile run the standard pin names compliance test suites:
+
 `mbed test -t GCC_ARM -m DISCO_L475VG_IOT01A -n "*pin_names*" --compile`
+
 `mbed test -t GCC_ARM -m DISCO_L475VG_IOT01A -n *pin_names* --run`
 
 You can expect the following output:
